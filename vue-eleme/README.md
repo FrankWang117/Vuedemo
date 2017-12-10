@@ -1,6 +1,14 @@
-# sell
+# vue-eleme
 
-> sell app for use vue 
+> eleme app for  vue 2.X
+
+根据网上以及慕课上的vue-eleme 教程,使用Vue 2.x 构建一个饿了么项目.
+
+使用到的技术目前有 `vue-cli` / `vue-router` / `express` 
+
+遇到的问题以及解决办法:  
+
+
 
 ## Build Setup
 
