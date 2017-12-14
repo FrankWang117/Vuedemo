@@ -1,0 +1,29 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Wang (wangsen9108@gmail.com)
+ * @date    2017-12-11 16:22:44
+ * @version $Id$
+ */
+@import '../static/css/reset.css';
+@import '../static/css/mixin.scss';
+@font-face {
+	font-family: 'weatherfont';
+	src:url('../static/fonts/SourceHanSerifSC-ExtraLight.otf');
+}
+@media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5) {
+	.border-1px {
+		&::after {
+			-webkit-transform: scaleY(0.7);
+			transform: scaleY(0.7);
+		}
+	}
+}
+@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2) {
+	.border-1px {
+		&::after {
+			-webkit-transform: scaleY(0.5);
+			transform: scaleY(0.5)
+		}
+	}
+}
