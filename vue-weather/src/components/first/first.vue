@@ -16,9 +16,9 @@
                 <p>{{Deslife}}</p>
             </div>
         </div>
-
-        <ul class="hourly">
-            <li class="hourly-item" v-for="(item,index) in Hourlyforecast">
+        <div class="hourly-wrapper">
+            <ul class="hourly">
+            <li class="hourly-item" v-for="(item,index,key) in Hourlyforecast" :key = key>
                 <p class="time">{{item.time.slice(11)}}</p>
                 <div class="hourly-img">
                     <img :src = "'static/weather-icon/'+item.cond_code +'.png'"  alt="">
@@ -26,6 +26,8 @@
                 <p class="hourly-temp"><span class="hourly-temp-span">{{item.tmp}}</span><span class="angle">°</span></p>
             </li>
         </ul>
+        </div>
+ 
 
     </div>
 </template>
@@ -34,7 +36,7 @@
 const wURL = "https://free-api.heweather.com/s6/weather/?location=beijing&key=24f75f285e1946289fe5b8af7d2abf64";
 export default {
     props:[
-
+        
     ],
     data() {
         return {
@@ -54,13 +56,13 @@ export default {
         getWeather()  {
             var that = this;
             this.$http.get(wURL).then(function (response) {
+            console.log(response.data);
             response = response.data;
             var weatherInfo = response.HeWeather6[0];
             var now = weatherInfo.now;//当前天气num
             var forecast = weatherInfo.daily_forecast;//预告array
             var lifestyle = weatherInfo.lifestyle;//生活指数array
-            console.log("weatherInfo.hourly.splice(0,4)");
-            var hourly = weatherInfo.hourly.splice(0,4); //逐小时array
+            var hourly = weatherInfo.hourly.splice(0,4);//逐小时array
             var nowcode = now.cond_code;
             var arraysrc = [];
             that.Nowtmp = now.tmp;
@@ -73,34 +75,11 @@ export default {
         }
     },
     created: function(){
-        var that = this;
-        this.$http.get(wURL).then(function (response) {
-            response = response.data;
-            // var forecastInfo = response.HeWeather6[0].daily_forecast;
-            // console.log(forecastInfo);
-            // that.allinfo = forecastInfo;
-            // that.firstInfo = forecastInfo[0];
-            // that.secondInfo = forecastInfo[1];
-            // that.thirdInfo = forecastInfo[2];
-            var weatherInfo = response.HeWeather6[0];
-            var now = weatherInfo.now;//当前天气num
-            var forecast = weatherInfo.daily_forecast;//预告array
-            var lifestyle = weatherInfo.lifestyle;//生活指数array
-            console.log(response);
-            var hourly = weatherInfo.hourly.splice(0,4); //逐小时array
-            var nowcode = now.cond_code;
-            var arraysrc = [];
-            that.Nowtmp = now.tmp;
-            that.Htmp = forecast[0].tmp_max;
-            that.Ltmp = forecast[0].tmp_min;
-            that.Deslife = lifestyle[0].txt;
-            that.Hourlyforecast = hourly;
-            that.srcNow = 'static/weather-icon/' + nowcode+'.png';
-        })
+        console.log("created");
     },
 
     mounted:function(){
-        // this.getWeather();
+        this.getWeather();
 
     },
     beforeMount:function() {
@@ -120,22 +99,27 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 $first-bgc:#1D1F21;
+$iconbgc:#E3BB88;
+$tmpbgc:#DB9864;
+$hourlybgc: #B0695A;
 $temp-fontcolor:#DCE7EC;
 $temp-description:#9BCFF0;
 $time-color:#8395A3;
     .content-first {
-        background: $first-bgc;
+        // background: $first-bgc;
         font-family:'weatherfont';
         .w-icon {
             position: relative;
             width: 100%;
             text-align:center;
+            background:$iconbgc;
             .img-icon {
                 width:80%;
                 height:80%;
             }
         }
         .temp {
+            background: $tmpbgc;
             .temp-content {
                 width:90%;
                 margin:0 auto;
@@ -144,9 +128,9 @@ $time-color:#8395A3;
                     color: $temp-fontcolor;
                     &>p {
                         line-height:100px;
-                    }
+                    }    
                     .now {
-
+ 
                     }
                 }
                 .temp-horl {
@@ -170,14 +154,16 @@ $time-color:#8395A3;
                         line-height: 48px;
                         white-space: nowrap;
                         overflow: hidden;
-                        text-overflow: ellipsis
+                        text-overflow: ellipsis     
                     }
             }
+    .hourly-wrapper {
+        background: $hourlybgc;
         .hourly {
             display: flex;
             margin: 0 auto;
             width: 90%;
-            margin-top: 20px;
+            padding-top: 20px;
             .hourly-item {
                 flex: 1;
                 text-align:center;
@@ -196,5 +182,7 @@ $time-color:#8395A3;
                 color: $temp-fontcolor;
             }
         }
+    }
+        
     }
 </style>

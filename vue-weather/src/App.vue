@@ -4,7 +4,7 @@
       <v-header></v-header>
           <div class="tab border-1px" >
       <div class="tab-item now"  @click = "ChangeWidth($event)" >
-        <router-link to="/first">first</router-link>
+        <router-link to="/first">first</router-link>   
       </div>
       <div class="tab-item" @click = "ChangeWidth($event)" >
         <router-link to="/second">second</router-link>
@@ -14,64 +14,68 @@
       </div>
     </div>
     </div>
-    <router-view/>
+    <transition mode='out-in' enter-active-class="animated fadeInRight" leave-active-class="animated flipoutY" >
+        <router-view/>
+    </transition>
+
   </div>
 </template>
 
 <script>
-import Header from '@/components/header/header';
-var wURL = "https://free-api.heweather.com/s6/weather/?location=beijing&key=24f75f285e1946289fe5b8af7d2abf64";
+import Header from "@/components/header/header";
+var wURL =
+  "https://free-api.heweather.com/s6/weather/?location=beijing&key=24f75f285e1946289fe5b8af7d2abf64";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    'v-header':Header
+    "v-header": Header
   },
-  data(){
+  data() {
     return {
-      heweather: {},
-    }
+      heweather: {}
+    };
   },
-  methods:{
+  methods: {
     ChangeWidth(event) {
       console.log(event.currentTarget);
       var activediv = event.currentTarget;
       var divbox = event.currentTarget.parentNode;
-      activediv.classList.add('now');
-      for (var i = 0;i< 3;i++){
-        if(divbox.children[i] != activediv) {
-          divbox.children[i].classList.remove('now');
+      activediv.classList.add("now");
+      for (var i = 0; i < 3; i++) {
+        if (divbox.children[i] != activediv) {
+          divbox.children[i].classList.remove("now");
         }
       }
     }
   },
-  created: function(){
-     var that = this;
-      this.$http.get(wURL).then(function (response) {
+  created: function() {
+    var that = this;
+    this.$http.get(wURL).then(function(response) {
       console.log(response.data + "from app.ve");
       that.heweather = response.data;
-      console.log(that.heweather)
-  });
+      console.log(that.heweather);
+    });
   },
   mounted() {
-    console.log("app.vue  mounted")
-  },
-}
+    console.log("app.vue  mounted");
+  }
+};
 </script>
 
 <style  lang='scss'>
-@import '../static/css/index.scss';
+@import "../static/css/index.scss";
 html {
   height: 100%;
   body {
-  height: 100%;
+    height: 100%;
     #app {
       display: flex;
       flex-direction: column;
       height: 100%;
       .headwrapper {
         flex: 0 0 80px;
-        background: #A5B7A2;
+        background: #a5b7a2;
       }
       &:last-child {
         flex: 1;
@@ -85,18 +89,24 @@ html {
   width: 100%;
   height: 40px;
   line-height: 40px;
-  @include border-1px(#5f7462);
+  // @include border-1px(red);
   .tab-item {
     flex: 1;
     text-align: center;
     a {
       display: block;
       height: 100%;
+      color: #fff;
+      font-size: 18px;
     }
   }
   .now {
     flex: 2;
     background: #5f7462;
+    border-radius: 5px;
+    a {
+      font-weight: 700;
+    }
   }
 }
 </style>

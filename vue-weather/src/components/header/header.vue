@@ -1,5 +1,10 @@
 <template>
-    <div class="header">Header</div>
+    <div class="header">
+        <div class="logo">
+            <img width="122" height="40" src="./logox.png" alt="logo">
+        </div>
+        <div class="other">other</div>
+    </div>
 </template>
 
 <script type="ecmascript-6">
@@ -8,8 +13,14 @@
 
 <style rel="stylesheet/scss" lang="scss">
     .header {
-    	color: orange;
-    	font-size: 30px;
-    	text-align: center;
+        display: flex;
+        height: 40px;
+        .logo {
+            flex: 0 0  122px;
+        }
+        .other {
+            flex: 1;
+            background: white;
+        }
     }
 </style>

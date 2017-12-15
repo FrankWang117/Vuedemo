@@ -20,14 +20,14 @@ export default {
     this.get_data()
   },
   methods: {
-    get_data:function (params) {
+    get_data:function(params) {
       var v = this;
-      if (!params) params = {}
-        v.$api.get('topics', params, function (r) {
+      if(!params) params = {}
+        v.$api.get('topics',params,function (r){
           v.lists = r.data
         })
     }
-
+ 
   }
 }
 </script>
