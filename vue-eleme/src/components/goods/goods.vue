@@ -47,7 +47,9 @@
 import BScroll from 'better-scroll';
 import shopcart from '@/components/shopcart/shopcart';
 import cartcontrol from '@/components/cartcontrol/cartcontrol';
+import Vue from 'vue';
 const ERR_OK = 0;
+const eventHub = new Vue();
 	export default {
 		props: {
 			seller: {
@@ -115,7 +117,16 @@ const ERR_OK = 0;
 				let foodList = this.$refs.fwrapper.getElementsByClassName('food-list-hook');
 				let el = foodList[index];
 				this.foodsScroll.scrollToElement(el, 300);
-			}
+			},
+			// addFood (target) {
+			// 	this._drop(target);
+			// },
+			// _drop (target) {
+			// 	// 体验优化,异步执行下落动画
+			// 	this.$nextTick(() => {
+			// 		this.$refs.shopcart.drop(target);
+			// 	});
+			// }
 	},
 		created () {
 			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];

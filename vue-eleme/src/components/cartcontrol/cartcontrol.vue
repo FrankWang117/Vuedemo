@@ -27,6 +27,8 @@ export default {
       } else {
         this.food.count++;
       }
+      console.log(this.$root.eventHub);
+      this.$root.eventHub.$emit('cart.add', event.target);
     },
     decreaseCart (event) {
         if (!event._constructed) {
