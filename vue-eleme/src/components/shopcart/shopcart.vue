@@ -22,12 +22,10 @@
 <script>
 export default {
     props: {
-        selectFoods:{
+        selectFoods: {
             type: Array,
-            default() {
-                return [
-                    {price:14,count:3}
-                ];
+            default () {
+                return [];
             }
         },
         deliveryPrice: {
@@ -41,35 +39,35 @@ export default {
 
     },
     computed: {
-        totalPrice() {
+        totalPrice () {
             let total = 0;
-            this.selectFoods.forEach( (food) =>{
+            this.selectFoods.forEach((food) => {
                 total += food.price * food.count;
             });
             return total;
         },
-        totalCount() {
+        totalCount () {
             let count = 0;
-            this.selectFoods.forEach( (food) => {
+            this.selectFoods.forEach((food) => {
                 count += food.count;
             });
             return count;
         },
-        payDesc() {
-            if ( this.totalPrice === 0) {
+        payDesc () {
+            if (this.totalPrice === 0) {
                 return `🔱${this.minPrice}元起送`;
-            }else if (this.totalPrice<this.minPrice) {
+            } else if (this.totalPrice < this.minPrice) {
                 let diff = this.minPrice - this.totalPrice;
                 return `还差🔱${diff}元起送`;
-            }else {
+            } else {
                 return '去结算';
             }
         },
-        payClass() {
+        payClass () {
             if (this.totalPrice < this.minPrice) {
-                return 'not-enough'
-            }else {
-                return 'enough'
+                return 'not-enough';
+            } else {
+                return 'enough';
             }
         }
     }
