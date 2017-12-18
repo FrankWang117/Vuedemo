@@ -58,7 +58,12 @@ export default {
             })
         },
         mounted() {
-            
+            // var that = this;
+            // var forecastInfo = that.heweather.HeWeather6[0].daily_forecast;
+            // console.log(forecastInfo);
+            // forecastInfo.length = 5;
+            // forecastInfo.shift();
+            // that.allinfo = forecastInfo;
         }
     }
 </script>

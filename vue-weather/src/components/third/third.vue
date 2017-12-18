@@ -1,9 +1,29 @@
 <template>
-    <div class="content-third">now ,it is third page finally</div>
+    <div class="content-third">
+        <p>now ,it is third page finally</p>
+    </div>
 </template>
 
 <script type="ecmascript-6">
-    export default {}
+    export default {
+        props: {
+            heweather: {
+                type: Object
+            }
+        },
+        data() {
+            return {
+                basic:{}
+            }
+        },
+        created() {
+
+            
+        },
+        mounted() {
+
+        }
+    }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
