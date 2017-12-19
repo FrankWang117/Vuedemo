@@ -3,9 +3,9 @@
     <div class="headwrapper">
       <v-header></v-header>
       <div class="tab" >
-      <div class="tab-item now"  @click = "ChangeWidth($event)" >
-        <router-link to="/first">first</router-link>   
-      </div>
+          <div class="tab-item now"  @click = "ChangeWidth($event)" >
+            <router-link to="/first">first</router-link>   
+          </div>
       <div class="tab-item" @click = "ChangeWidth($event)" >
         <router-link to="/second">second</router-link>
       </div>
@@ -76,7 +76,6 @@ html {
         flex: 0 0 80px;
         background: #a5b7a2;
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
       }
       &:last-child {
         flex: 1;

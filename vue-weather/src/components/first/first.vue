@@ -3,27 +3,34 @@
         <div class="w-icon">
             <img class="img-icon" :src='srcNow' height="128" width="128">
             <div class="basicinfo" @click="showInfo">
-                <div class="city">{{City}}</div>
-                <div class="airq"><span>{{Airq.aqi}}</span>
-                <span>{{Airq.qlty}}</span></div>
+                <p class="city">{{City}}</p>
+                <p class="time">{{Nowtime}}</p>
+            </div>
+            <div class="airqinfo">
+                <p class="text">AQI</p>
+                <p class="airq" :class="Airqclass"><span>{{Airq.aqi}}</span>
+                <span>{{Airq.qlty}}</span></p>
             </div>
             <div class="showinfo" @click="closeInfo" v-show="show">
-                <p class="locationcity">当前地点{{City}}</p>
-                <p class="time">时间</p>
-                <p>空气质量</p>
+                <h2>今日天气详情</h2>
+                <!-- <p class="locationcity">{{City}}</p> -->
+                <p class="time">{{Nowtime}}</p>
+                <div class="sun"><p class="sr">日出时间:  {{todayforecast.sr}}</p><p class="ss">日落时间:  {{todayforecast.ss}}</p></div>
+                <p class="wind">{{nowWeather.wind_dir}},  级数:  {{nowWeather.wind_sc}}  级</p>
+                <p class="uv" v-if="lifestyle[7]">紫外线强度: {{lifestyle[7].brf}}</p>
             </div>
         </div>
         <div class="temp">
             <div class="temp-content">
                 <div class="temp-now">
-                    <p><span class="now">{{Nowtmp}}</span><span class="angle">°</span></p>
+                    <p><span class="now">{{nowWeather.tmp}}</span><span class="angle">°</span></p>
                 </div>
                 <div class="temp-horl">
-                    <p><span class="arrow">↑</span><span class="temp-h">{{Htmp}}</span><span class="angle">°</span><span class="arrow">↓</span><span class="temp-l">{{Ltmp}}</span><span class="angle">°</span></p>
+                    <p><span class="arrow">↑</span><span class="temp-h">{{todayforecast.tmp_max}}</span><span class="angle">°</span><span class="arrow">↓</span><span class="temp-l">{{todayforecast.tmp_min}}</span><span class="angle">°</span></p>
                 </div>
             </div>
             <div class="temp-desc">
-                <p>{{Deslife}}</p>
+                <p ref="deslift" @click="showDeslife" v-if="lifestyle[0]">{{lifestyle[0].txt}}</p>
             </div>
         </div>
         <div class="hourly-wrapper">
@@ -37,8 +44,6 @@
             </li>
         </ul>
         </div>
- 
-
     </div>
 </template>
 
@@ -50,18 +55,18 @@ export default {
     props: {},
     data() {
         return {
-            // nowWeather: {},
-            Nowtmp: 2,
-            Htmp: 0,
-            Ltmp: 0,
-            Deslife: '',
+            nowWeather: {},
+            todayforecast:{},
             Hourlyforecast:{},
+            lifestyle: [],
             srcNow: 'static/weather-icon/100.png',
             srcHourly: '',
             Forecasttmp: 4,
             Airq: {},
             City:'北京',
             show: false,
+            showdeslife: false,
+            Nowtime:'',
         }
     },
     methods:{
@@ -70,17 +75,11 @@ export default {
             this.$http.get(wURL).then(function (response) {
             response = response.data;
             var weatherInfo = response.HeWeather6[0];
-            var now = weatherInfo.now;//当前天气num
-            var forecast = weatherInfo.daily_forecast;//预告array
-            var lifestyle = weatherInfo.lifestyle;//生活指数array
-            var hourly = weatherInfo.hourly.splice(0,4);//逐小时array
-            var nowcode = now.cond_code;
-            var arraysrc = [];
-            that.Nowtmp = now.tmp;
-            that.Htmp = forecast[0].tmp_max;
-            that.Ltmp = forecast[0].tmp_min;
-            that.Deslife = lifestyle[0].txt;
-            that.Hourlyforecast = hourly;
+            that.nowWeather = weatherInfo.now;//当前天气num
+            that.todayforecast = weatherInfo.daily_forecast[0];//预告array
+            that.lifestyle = weatherInfo.lifestyle;//生活指数array
+            var nowcode = weatherInfo.now.cond_code;
+            that.Hourlyforecast = weatherInfo.hourly.splice(0,4);//逐小时array
             that.srcNow = 'static/weather-icon/' + nowcode+'.png';
         });
         },
@@ -99,6 +98,16 @@ export default {
         },
         closeInfo() {
             this.show = false;
+        },
+        showDeslife() {
+            this.showdeslife = !this.showdeslife;
+            if (this.showdeslife) {
+                this.$refs.deslift.style.whiteSpace= "normal";
+                this.$refs.deslift.style.lineHeight= 36+ 'px';
+            } else {
+                this.$refs.deslift.style.whiteSpace= "nowrap";
+                this.$refs.deslift.style.lineHeight= 48 + 'px';
+            }
         }
     },
     created: function(){
@@ -107,15 +116,18 @@ export default {
     mounted:function(){
         this.getWeather();
         this.getAirq();
+        this.Nowtime = new Date().toLocaleDateString().slice(5);
     },
-    beforeMount:function() {
-        console.log("beforeMount" + this.Nowtmp)
-    },
-    beforeUpdate:function(){
-        console.log("beforeupdata" + this.Nowtmp);
-    },
-    updated:function(){
-        console.log("updated" + this.Nowtmp)
+    computed:{
+        Airqclass: function () {
+            if (this.Airq.aqi < 50) {
+                return 'green';
+            } else if (this.Airq.aqi < 100) {
+                return "orange";
+            } else {
+                return "red";
+            }
+        },
     }
 };
 </script>
@@ -136,6 +148,8 @@ $time-color:#8395A3;
             width: 100%;
             text-align:center;
             background:$iconbgc;
+            color: #fff;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             .img-icon {
                 width:80%;
                 height:80%;
@@ -143,22 +157,48 @@ $time-color:#8395A3;
             .basicinfo {
                 position: absolute;
                 display:inline-block;
-                left: 40px;
-                top: 40px;
-                width: 50px;
-                height: 40px;
-                border:1px solid #eee;
-                border-radius: 5px;
-                // box-shadow: 2px 2px 2px 2px #eee;
-                color: #fff;
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                left: 20px;
+                top: 20px;
+                // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
                 font-size: 0;
                 .city {
-                    font-size: 14px;
+                    font-size: 22px;
+                }
+                .time,.airq {
+                    height: 35px;
+                    font-size: 20px;
+                    line-height: 35px;
+                }
+            }
+            .airqinfo {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                font-size: 0;
+                .text {
+                    font-size: 22px;
+                    height: 26px;
+                    line-height: 26px;
                 }
                 .airq {
-                    font-size: 14px;
+                    line-height: 35px;
+                    height: 35px;
+                    font-size: 20px;
+                    width: 80px;
                 }
+                .red {
+                    background: red;
+                    border-radius: 17px;
+                }
+                .orange {
+                    background: orange;
+                    border-radius: 17px;
+                }
+                .green {
+                    background: green;
+                    border-radius: 17px;
+                }
+                // color: #fff;
             }
             .showinfo {
                 position: absolute;
@@ -166,7 +206,27 @@ $time-color:#8395A3;
                 left:0;
                 width: 100%;
                 height: 100%;
-                background: #eee;
+                background: rgba(7, 17, 27, .6);
+                h2 {
+                    margin: 10px 0px;
+                    font-size: 28px;
+                }
+                .locationcity,.time,.wind {
+                    font-size: 22px;
+                    padding: 5px;
+                }
+                .sun {
+                    display: flex;
+                    padding: 5px 0;
+                    font-size: 0px;
+                    .sr,.ss {
+                        flex: 1;
+                        font-size: 22px;
+                    }
+                }
+                .wind {
+                    
+                }
             }
         }
         .temp {
@@ -199,13 +259,14 @@ $time-color:#8395A3;
             .temp-desc {
                     width: 90%;
                     margin: 0 auto;
-                    font-size: 38px;
+                    font-size: 26px;
                     color: $temp-description;
                     &>p{
                         line-height: 48px;
                         white-space: nowrap;
                         overflow: hidden;
-                        text-overflow: ellipsis     
+                        text-overflow: ellipsis;
+                        color: #fff;     
                     }
             }
     .hourly-wrapper {
@@ -224,7 +285,7 @@ $time-color:#8395A3;
             }
             .hourly-img {
                 text-align:center;
-                padding:10px 0;
+                // padding:10px 0;
                 img {
                     width:70%;
                 }

@@ -106,7 +106,7 @@ $fullheight: 100%;
                         letter-spacing: 2px;
                     }
                     .destext {
-                        text-indent: 20px;
+                        // text-indent: 20px;
                         font-size: 22px;
                         font-weight: lighter;
                         color: #fff;
