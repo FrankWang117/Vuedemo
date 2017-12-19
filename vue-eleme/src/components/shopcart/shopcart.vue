@@ -38,7 +38,7 @@
                         <span>💰{{food.price*food.count}}</span>
                     </div>
                     <div class="cartcontrol-wrapper">
-                        <cartcontrol :food="food"></cartcontrol>
+                        <cartcontrol @add="addFood" :food="food"></cartcontrol>
                     </div>
                 </li>
             </ul>
@@ -49,13 +49,18 @@
 </template>
 <script>
 import BScroll from 'better-scroll';
-import cartcontrol from "@/components/cartcontrol/cartcontrol";
+import cartcontrol from '@/components/cartcontrol/cartcontrol';
 export default {
   props: {
     selectFoods: {
       type: Array,
-      default() {
-        return [];
+      default () {
+        return [
+          {
+            price: 10,
+            count: 1
+          }
+        ];
       }
     },
     deliveryPrice: {
@@ -67,7 +72,7 @@ export default {
       default: 0
     }
   },
-  data() {
+  data () {
     return {
       balls: [
         { show: false },
@@ -80,20 +85,17 @@ export default {
       fold: true
     };
   },
-  created() {
-    this.$root.eventHub.$on("cart.add", this.drop);
-  },
   computed: {
     totalPrice () {
       let total = 0;
-      this.selectFoods.forEach(food => {
+      this.selectFoods.forEach((food) => {
         total += food.price * food.count;
       });
       return total;
     },
     totalCount () {
       let count = 0;
-      this.selectFoods.forEach(food => {
+      this.selectFoods.forEach((food) => {
         count += food.count;
       });
       return count;
@@ -124,8 +126,6 @@ export default {
         if (show) {
             this.$nextTick(() => {
                 if (!this.scroll) {
-
-                
                 this.scroll = new BScroll(this.$refs.listcontent, {
                     click: true
                 });
@@ -149,6 +149,9 @@ export default {
         }
       }
     },
+    addFood(target) {
+      this.drop(target);
+    },
     beforeEnter (el) {
       let count = this.balls.length;
       while (count--) {
@@ -157,10 +160,10 @@ export default {
           let rect = ball.el.getBoundingClientRect();
           let x = rect.left - 32;
           let y = -(window.innerHeight - rect.top - 22);
-          el.style.display = "";
+          el.style.display = '';
           el.style.webkitTransform = `translate3d(0,${y}px,0)`;
           el.style.transform = `translate3d(0,${y}px,0)`;
-          let inner = el.querySelector(".inner-hook");
+          let inner = el.querySelector('.inner-hook');
           inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
           inner.style.transform = `translate3d(${x}px,0,0)`;
         }
@@ -170,18 +173,18 @@ export default {
       /* eslint-disable no-unused-vars */
       let rf = el.offsetHeight;
       this.$nextTick(() => {
-        el.style.webkitTransform = "translate3d(0,0,0)";
-        el.style.transform = "translate3d(0,0,0)";
-        let inner = el.querySelector(".inner-hook");
-        inner.style.webkitTransform = "translate3d(0,0,0)";
-        inner.style.transform = "translate3d(0,0,0)";
+        el.style.webkitTransform = 'translate3d(0,0,0)';
+        el.style.transform = 'translate3d(0,0,0)';
+        let inner = el.querySelector('.inner-hook');
+        inner.style.webkitTransform = 'translate3d(0,0,0)';
+        inner.style.transform = 'translate3d(0,0,0)';
       });
     },
     afterEnter (el) {
       let ball = this.dropBalls.shift();
       if (ball) {
         ball.show = false;
-        el.style.display = "none";
+        el.style.display = 'none';
       }
     },
     toggleList () {
@@ -189,6 +192,9 @@ export default {
             return;
         }
         this.fold = !this.fold;
+    },
+    hideList () {
+      this.fold = true;
     }
   },
   components: {
