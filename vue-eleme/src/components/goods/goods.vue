@@ -2,7 +2,7 @@
 	<div class = "goods">
 		<div class="menu-wrapper" ref="mwrapper">
 			<ul>
-				<li v-for="(item,index) in goods" class="menu-item" :class = "index === currentIndex? 'current':''" @click = "selectMenu(index,$event)">
+				<li v-for="(item,index) in goods" class="menu-item" :class = "{'current': currentIndex === index}" @click = "selectMenu(index,$event)" ref="menuList">
 					<span class="text border-1px">
 						<span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>
 					{{item.name}}
@@ -12,10 +12,10 @@
 		</div>
 		<div class="foods-wrapper" ref="fwrapper">
 			<ul>
-				<li class="foot-list food-list-hook" v-for="(item,index,key) in goods" :key="key" @click="selectFood(food,$event)">
+				<li class="foot-lis" v-for="(item,index,key) in goods" :key="key"  ref="foodList">
 					<h1 class="title">{{item.name}}</h1>
 					<ul>
-						<li class="food-item border-1px" v-for="(food,index,key) in item.foods" :key="key">
+						<li class="food-item border-1px" v-for="(food,index,key) in item.foods" :key="key" @click="selectFood(food,$event)">
 							<div class="icon">
 								<img :src="food.icon" alt="" width="57" height="57">
 							</div>
@@ -31,7 +31,7 @@
 									<span class="old" v-show="food.oldPrice">${{food.oldPrice}}</span>
 								</div>
 								<div class="cartcontrol-wrapper">
-									<cartcontrol :food = "food"></cartcontrol>
+									<cartcontrol @add="addFood" :food = "food"></cartcontrol>
 								</div>
 							</div>
 						</li>
@@ -39,8 +39,8 @@
 				</li>
 			</ul>
 		</div>
-		<shopcart ref="shopcart" :select-foods = "selectFoods" :delivery-price = "seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
-		<food :food = "selectedFood" ref="food"></food>
+		<shopcart ref="shopcart" :selectFoods = "selectFoods" :deliveryPrice = "seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+		<food @add = "addFood" :food = "selectedFood" ref="food"></food>
 	</div>
 </template>
 <script>
@@ -49,7 +49,6 @@ import shopcart from '@/components/shopcart/shopcart';
 import cartcontrol from '@/components/cartcontrol/cartcontrol';
 import food from '@/components/food/food';
 const ERR_OK = 0;
-// const eventHub = new Vue();
 	export default {
 		props: {
 			seller: {
@@ -97,30 +96,34 @@ const ERR_OK = 0;
 				probeType: 3
 			});
 			this.foodsScroll.on('scroll', (pos) => {
-				this.scrollY = Math.abs(Math.round(pos.y));
+				if (pos.y <= 0) {
+					this.scrollY = Math.abs(Math.round(pos.y));
+				}
 			});
 		},
 			_calculateHeight () {
-				let foodList = this.$refs.fwrapper.getElementsByClassName('food-list-hook');
-				let foodgao;
-				foodgao = 0;
-				this.listHeight.push(foodgao);
+				let foodList = this.$refs.foodList;
+				let height = 0;
+				this.listHeight.push(height);
 				for (let i = 0; i < foodList.length; i++) {
 					let item = foodList[i];
-					foodgao += item.clientHeight;
-					this.listHeight.push(foodgao);
+					height += item.clientHeight;
+					this.listHeight.push(height);
 				}
 			},
-			_drop () {
+			_drop (target) {
 				this.$nextTick(() => {
 					this.$refs.shopcart.drop(target);
 				});
 			},
-			selectMenu (index) {
+			addFood (target) {
+				this._drop(target);
+			},
+			selectMenu (index, event) {
 				if (!event._constructed) {
 					return;
 				}
-				let foodList = this.$refs.fwrapper.getElementsByClassName('food-list-hook');
+				let foodList = this.$refs.foodList;
 				let el = foodList[index];
 				this.foodsScroll.scrollToElement(el, 300);
 			},
@@ -145,9 +148,6 @@ const ERR_OK = 0;
 				}
 			});
 		},
-		mounted () {
-
-	},
 	components: {
 		shopcart,
 		cartcontrol,

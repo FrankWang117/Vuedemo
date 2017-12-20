@@ -18,9 +18,9 @@
         </div>
     </div>
     <div class="ball-container">
-        <transition name="drop" v-for="(ball,index,key) in balls" :key="key" v-on:before-enter = "beforeEnter" v-on:enter ="enter" v-on:after-enter="afterEnter" >
+        <transition name="drop" v-for="(ball,index,key) in balls" :key="key" @before-enter = "beforeDrop" @enter ="dropping" @after-enter="afterDrop" >
         <div class="ball" v-show="ball.show">
-            <div class="inner" inner-hook></div>
+            <div class="inner inner-hook"></div>
         </div>
         </transition>
     </div>
@@ -149,10 +149,10 @@ export default {
         }
       }
     },
-    addFood(target) {
+    addFood (target) {
       this.drop(target);
     },
-    beforeEnter (el) {
+    beforeDrop (el) {
       let count = this.balls.length;
       while (count--) {
         let ball = this.balls[count];
@@ -169,7 +169,7 @@ export default {
         }
       }
     },
-    enter (el) {
+    dropping (el, done) {
       /* eslint-disable no-unused-vars */
       let rf = el.offsetHeight;
       this.$nextTick(() => {
@@ -178,9 +178,10 @@ export default {
         let inner = el.querySelector('.inner-hook');
         inner.style.webkitTransform = 'translate3d(0,0,0)';
         inner.style.transform = 'translate3d(0,0,0)';
+        el.addEventListener('transitionend', done);
       });
     },
-    afterEnter (el) {
+    afterDrop (el) {
       let ball = this.dropBalls.shift();
       if (ball) {
         ball.show = false;
@@ -192,9 +193,6 @@ export default {
             return;
         }
         this.fold = !this.fold;
-    },
-    hideList () {
-      this.fold = true;
     }
   },
   components: {
