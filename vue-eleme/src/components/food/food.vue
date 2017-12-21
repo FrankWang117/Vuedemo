@@ -31,6 +31,21 @@
           <div class="rating">
               <h1 class="title">商品评价</h1>
               <ratingselect :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings = "food.ratings" @select="selectRating" @toggle="toggleContent"></ratingselect>
+              <div class="rating-wrapper">
+                  <ul v-show="food.ratings && food.ratings.length">
+                     <li class="rating-item border-1px" v-for="rating in food.ratings" v-show="needShow(rating.rateType,rating.text)" >
+                         <div class="user">
+                             <span class="name">{{rating.username}}</span>
+                             <img :src="rating.avatar" width="12" height="12" alt="" class="avatar">
+                         </div>
+                         <div class="time">{{rating.rateTime | formatDate}}</div>
+                         <p class="text">
+                             <span :class="{'icon-thumb_up':rating.rateType === 0,'icon-thumb_dowb':rating.rateType === 1}"></span>{{rating.text}}
+                         </p>
+                     </li>
+                  </ul>
+                  <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+              </div>
           </div>
       </div>
   </div>
@@ -42,6 +57,7 @@ import BScroll from 'better-scroll';
 import cartcontrol from '@/components/cartcontrol/cartcontrol';
 import split from '@/components/split/split';
 import ratingselect from '@/components/ratingselect/ratingselect';
+import {formatDate} from '@/common/js/date.js';
 //   const POSITIVE = 0;
 //   const NEGATIVE = 1;
   const ALL = 2;
@@ -99,6 +115,22 @@ export default {
           this.$nextTick(() => {
               this.scroll.refresh();
           });
+      },
+      needShow (type, text) {
+          if (this.onlyContent && !text) {
+              return false;
+          }
+          if (this.selectType === ALL) {
+              return true;
+          } else {
+              return type === this.selectType;
+          }
+      },
+  },
+  filters: {
+      formatDate (thme) {
+          let date = new Date(time);
+          return formatDate(date,'yyyy-MM-dd hh:mm');
       }
   },
   components: {
@@ -109,6 +141,8 @@ export default {
 };
 </script>
 <style lang="scss">
+@import "../../common/styles/mixin.scss";
+
 .food {
     position: fixed;
     left: 0;
@@ -225,8 +259,59 @@ export default {
             font-size: 14px;
             color: rgb(7,17,27);  
         }
+        .rating-wrapper {
+            padding: 0 18px;
+            .rating-item {
+                position: relative;
+                padding: 16px 0;
+                @include border-1px(rgba(7,17,27,.1));
+                .user {
+                    position: absolute;
+                    right: 0;
+                    top: 16px;
+                    line-height: 12px;
+                    font-size: 0;
+                    .name {
+                        display: inline-block;
+                        margin-right: 6px;
+                        vertical-align: top;
+                        font-size: 10px;
+                        color: rgb(147, 152, 159);
+                    }
+                    .avatar {
+                        border-radius: 50%;
+                    }
+                }
+                .time {
+                    line-height: 12px;
+                    margin-top: 6px;
+                    font-size: 10px;
+                    color: rgb(147, 153, 159);
+                }
+                .text {
+                    line-height: 16px;
+                    font-size: 12px;
+                    color: rgb(7, 17, 27);
+                    .icon-thumb_up,.icon-thumb_down {
+                        line-height: 16px;
+                        margin-right: 4px;
+                        font-size: 12px;
+                    }
+                    .icon-thumb_up {
+                        color: rgb(0, 160, 220);
+                    }
+                    .icon-thumb_down {
+                        color: rgb(147, 153, 159);
+                    }
+                }
+            }
+            .no-rating {
+                padding: 16px 0;
+                font-size: 12px;
+                color: rgb(147, 153, 159);
+            }
     }
-    
+    }  
 }
 .move-enter-active,.move-leave-active {
     transform: translate3d(100%,0,0);
