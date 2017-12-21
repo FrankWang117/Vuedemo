@@ -1,24 +1,17 @@
 <template>
     <div class="content-third">
-        <p>now ,it is third page finally</p>
+        <p>其他</p>
     </div>
 </template>
 
 <script type="ecmascript-6">
     export default {
         props: {
-            heweather: {
-                type: Object
+            address: {
+                type: String
             }
         },
-        data() {
-            return {
-                basic:{}
-            }
-        },
-        created() {
-
-            
+        created() {   
         },
         mounted() {
 

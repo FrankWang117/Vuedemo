@@ -3,42 +3,45 @@
     <div class="headwrapper">
       <v-header></v-header>
       <div class="tab" >
+        <transition name="zoom">
           <div class="tab-item now"  @click = "ChangeWidth($event)" >
-            <router-link to="/first">first</router-link>   
+            <router-link to="/first">今日</router-link>   
           </div>
+        </transition>
       <div class="tab-item" @click = "ChangeWidth($event)" >
-        <router-link to="/second">second</router-link>
+        <router-link to="/second">预报</router-link>
       </div>
       <div class="tab-item" @click = "ChangeWidth($event)" >
-        <router-link to='/third'>third</router-link>
+        <router-link to='/third'>其他</router-link>
       </div>
     </div>
     </div>
-    <transition enter-active-class="animated zoomInUp"  >
-        <router-view :heweather="heweather"/>
+    <transition enter-active-class="animated zoomInUp">
+        <router-view :address="address"/>
     </transition>
-
   </div>
 </template>
 
 <script>
 import Header from "@/components/header/header";
-var wURL =
-  "https://free-api.heweather.com/s6/weather/?location=beijing&key=24f75f285e1946289fe5b8af7d2abf64";
-
+var ipaddress = "https://weixin.jirengu.com/weather/ip";
 export default {
-  name: "app",
   components: {
     "v-header": Header
   },
-  data() {
+  data () {
     return {
-      heweather: {}
-    };
+      address:"",
+    }
+  },
+  created (){
+    var that = this;
+     this.$http.get(ipaddress).then(function(response) {
+      that.address = response.data.data;
+      });
   },
   methods: {
     ChangeWidth(event) {
-      console.log(event.currentTarget);
       var activediv = event.currentTarget;
       var divbox = event.currentTarget.parentNode;
       activediv.classList.add("now");
@@ -49,19 +52,8 @@ export default {
       }
     }
   },
-  created: function() {
-    var that = this;
-    this.$http.get(wURL).then(function(response) {
-      console.log(response.data + "from app.ve");
-      that.heweather = response.data;;
-    });
-  },
-  mounted() {
-    console.log("app.vue  mounted");
-  }
 };
 </script>
-
 <style  lang='scss'>
 @import "../static/css/index.scss";
 html {
@@ -75,36 +67,42 @@ html {
       .headwrapper {
         flex: 0 0 80px;
         background: #a5b7a2;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        .tab {
+          display: flex;
+          width: 100%;
+          height: 40px;
+          line-height: 40px;
+          .tab-item {
+            flex: 1;
+            text-align: center;
+            a {
+              display: block;
+              height: 100%;
+              color: #fff;
+              font-size: 22px;
+            }
+          }
+          .now {
+            flex: 2;
+            background: #5f7462;
+            border-radius: 5px;
+            transition: all 1s;
+            a {
+              font-family: "Franklin Gothic Medium", "Arial Narrow", Arial,
+                sans-serif;
+            }
+          }
+          .zoom-enter,
+          .zoom-leave-active {
+            flex: 1;
+          }
+        }
       }
       &:last-child {
         flex: 1;
       }
-    }
-  }
-}
-
-.tab {
-  display: flex;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  .tab-item {
-    flex: 1;
-    text-align: center;
-    a {
-      display: block;
-      height: 100%;
-      color: #fff;
-      font-size: 22px;
-    }
-  }
-  .now {
-    flex: 2;
-    background: #5f7462;
-    border-radius: 5px;
-    a {
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
   }
 }

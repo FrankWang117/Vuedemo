@@ -10,26 +10,25 @@
 
 <script>
 export default {
-  name: 'Index',
-  data () {
+  name: "Index",
+  data() {
     return {
-      lists:[]
-    }
+      lists: []
+    };
   },
-  created(){
-    this.get_data()
+  created() {
+    this.get_data();
   },
   methods: {
-    get_data:function(params) {
+    get_data: function(params) {
       var v = this;
-      if(!params) params = {}
-        v.$api.get('topics',params,function (r){
-          v.lists = r.data
-        })
+      if (!params) params = {};
+      v.$api.get("topics", params, function(r) {
+        v.lists = r.data;
+      });
     }
- 
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -37,9 +36,11 @@ export default {
 .logo {
   color: red;
 }
-.list{
+.list {
   line-height: 2;
   list-style: none;
-  li{ border-bottom: 1px solid #ddd }
+  li {
+    border-bottom: 1px solid #ddd;
+  }
 }
 </style>
