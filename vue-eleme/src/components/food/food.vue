@@ -125,12 +125,12 @@ export default {
           } else {
               return type === this.selectType;
           }
-      },
+      }
   },
   filters: {
-      formatDate (thme) {
+      formatDate (time) {
           let date = new Date(time);
-          return formatDate(date,'yyyy-MM-dd hh:mm');
+          return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
 	<div class="star" :class = "starType">
-		<span v-for = "(itemClass,index) in itemClasses" :class= "itemClass" class="star-item"></span>
+		<span v-for = "(itemClass,index) in itemClasses" :class= "itemClass" class="star-item"  key="index"></span>
 	</div>
 </template>
 
@@ -77,7 +77,7 @@ const CLS_OFF = 'off';
 			.star-item {
 				width: 15px;
 				height: 15px;
-				margin-right: 16px;
+				margin-right: 6px;
 				background-size: 15px 15px;
 				&:last-child {
 					margin-right: 0;
@@ -97,7 +97,7 @@ const CLS_OFF = 'off';
 			.star-item {
 				width: 10px;
 				height: 10px;
-				margin-right: 11px;
+				margin-right: 3px;
 				background-size: 10px 10px;
 				&:last-child {
 					margin-right: 0;
