@@ -8,8 +8,8 @@
                 </div>
                 <div class="num" v-show="totalCount>0">{{totalCount}}</div>
             </div>
-            <div class="price" :class="{'highlight': totalPrice > 0}">🔱{{totalPrice}}</div>
-            <div class="desc">另需配送费🔱{{deliveryPrice}}元</div>
+            <div class="price" :class="{'highlight': totalPrice > 0}">💰{{totalPrice}}</div>
+            <div class="desc">另需配送费💰{{deliveryPrice}}元</div>
         </div>
         <div class="content-right">
             <div class="pay" :class="payClass">
@@ -102,10 +102,10 @@ export default {
     },
     payDesc () {
       if (this.totalPrice === 0) {
-        return `🔱${this.minPrice}元起送`;
+        return `💰${this.minPrice}元起送`;
       } else if (this.totalPrice < this.minPrice) {
         let diff = this.minPrice - this.totalPrice;
-        return `还差🔱${diff}元起送`;
+        return `还差💰${diff}元起送`;
       } else {
         return '去结算';
       }

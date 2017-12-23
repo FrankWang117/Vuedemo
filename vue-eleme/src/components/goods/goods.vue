@@ -27,8 +27,8 @@
 									<span>好评率{{food.rating}}%</span>
 								</div>
 								<div class="price">
-									<span class="now">$ {{food.price}}</span>
-									<span class="old" v-show="food.oldPrice">${{food.oldPrice}}</span>
+									<span class="now">💰{{food.price}}</span>
+									<span class="old" v-show="food.oldPrice">💰{{food.oldPrice}}</span>
 								</div>
 								<div class="cartcontrol-wrapper">
 									<cartcontrol @add="addFood" :food = "food"></cartcontrol>
@@ -134,7 +134,7 @@ const ERR_OK = 0;
 				this.selectedFood = food;
 				this.$refs.food.show();
 			}
-	},
+		},
 		created () {
 			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 			this.$http.get('/api/goods').then((response) => {

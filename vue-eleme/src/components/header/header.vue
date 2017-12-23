@@ -233,7 +233,7 @@ export default {
 	}
 	.detail {
 		position: fixed;
-		z-index: 3;
+		z-index: 60;
 		top: 0;
 		left: 0;
 		width: 100%;
