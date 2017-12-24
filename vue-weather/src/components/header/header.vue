@@ -1,11 +1,11 @@
 <template>
     <div class="header">
-        <div class="logo">
+        <!-- <div class="logo">
             <img width="122" height="40" src="./logox.png" alt="logo">
-        </div>
-        <div class="other">
+        </div> -->
+        <!-- <div class="other">
             <p class="name">Weather</p>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -28,8 +28,7 @@ export default {};
       text-align: center;
       color: #fff;
       font-size: 28px;
-      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-        sans-serif;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",sans-serif;
     }
   }
 }

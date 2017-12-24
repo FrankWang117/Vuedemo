@@ -1,34 +1,36 @@
 <template>
   <div id="app">
     <div class="headwrapper">
-      <v-header></v-header>
+      <!-- <v-header></v-header> -->
       <div class="tab" >
         <transition name="zoom">
           <div class="tab-item now"  @click = "ChangeWidth($event)" >
-            <router-link to="/first">今日</router-link>   
+            <router-link to="/first">Today</router-link>   
           </div>
         </transition>
       <div class="tab-item" @click = "ChangeWidth($event)" >
-        <router-link to="/second">预报</router-link>
+        <router-link to="/second">Forecast</router-link>
       </div>
       <div class="tab-item" @click = "ChangeWidth($event)" >
-        <router-link to='/third'>其他</router-link>
+        <router-link to='/third'>Other</router-link>
       </div>
     </div>
     </div>
     <transition enter-active-class="animated zoomInUp">
+      <keep-alive>
         <router-view :address="address"/>
+      </keep-alive>
     </transition>
   </div>
 </template>
 
 <script>
-import Header from "@/components/header/header";
+// import Header from "@/components/header/header";
 var ipaddress = "https://weixin.jirengu.com/weather/ip";
 export default {
-  components: {
-    "v-header": Header
-  },
+  // components: {
+  //   "v-header": Header
+  // },
   data () {
     return {
       address:"",
@@ -64,11 +66,11 @@ html {
       display: flex;
       flex-direction: column;
       height: 100%;
+      background: #b0695a;
       .headwrapper {
-        flex: 0 0 80px;
+        flex: 0 0 40px;
         background: #a5b7a2;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-          sans-serif;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",sans-serif;
         .tab {
           display: flex;
           width: 100%;

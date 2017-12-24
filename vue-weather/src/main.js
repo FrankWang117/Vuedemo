@@ -10,14 +10,12 @@ import api from './config/api'
 // 将api方法绑定到全局
 Vue.prototype.$api = api
 Vue.config.productionTip = false
-
-
-Vue.prototype.$http = axios;
+Vue.prototype.$http = axios
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
-    router,
-    template: '<App/>',
-    components: { App }
+  el: '#app',
+  router,
+  template: '<App/>',
+  components: { App }
 })
 router.push('/first')

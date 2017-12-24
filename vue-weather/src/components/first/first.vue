@@ -35,7 +35,7 @@
                 <p ref="deslift" @click="showDeslife" v-if="lifestyle[0]">{{lifestyle[0].txt}}</p>
             </div>
         </div>
-        <div class="hourly-wrapper" v-show="Hourlyforecast.cond_code">
+        <div class="hourly-wrapper" v-show="Hourlyforecast[0]">
             <ul class="hourly">
             <li class="hourly-item" v-for="(item,index,key) in Hourlyforecast" :key = "key">
                 <p class="time">{{item.time.slice(11)}}</p>
@@ -97,7 +97,9 @@ export default {
         that.todayforecast = weatherInfo.daily_forecast[0]; //预告array
         that.lifestyle = weatherInfo.lifestyle; //生活指数array
         var nowcode = weatherInfo.now.cond_code;
+        console.log("这是逐小时预报",weatherInfo.hourly.splice(0, 4));
         that.Hourlyforecast = weatherInfo.hourly.splice(0, 4); //逐小时array
+        console.log("this is data",that.Hourlyforecast[0].cond_code)
         
         that.srcNow = "static/weather-icon/" + nowcode + ".png";
       });

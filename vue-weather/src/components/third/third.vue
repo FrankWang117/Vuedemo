@@ -1,6 +1,6 @@
 <template>
     <div class="content-third">
-        <p>其他</p>
+        <p>敬请期待</p>
     </div>
 </template>
 
@@ -11,17 +11,14 @@
                 type: String
             }
         },
-        created() {   
-        },
-        mounted() {
-
-        }
     }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
     .content-third {
-    	color:green;
+        margin-top: 30px;
+        text-align: center;
+    	color:#fff;
     	font-size: 30px;
     }
 </style>
