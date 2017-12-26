@@ -6,12 +6,11 @@
 </template>
 <script>
 export default {
-  
 }
 </script>
 <style lang="scss">
-@import "@/common/scss/variable";
-@import "@/common/scss/mixin";
+@import "src/common/scss/variable";
+@import "src/common/scss/mixin";
 
 .m-header {
     position: relative;
