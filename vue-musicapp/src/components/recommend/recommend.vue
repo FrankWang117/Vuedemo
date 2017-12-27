@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-    <scroll class="recommend-content" ref="scroll">
+    <div class="recommend-content" ref="scroll">
       <div>
         <div class="slider-wrapper" ref="sliderWrapper" v-if="recommends.length">
           <slider>
@@ -26,10 +26,10 @@
           </ul>
         </div>
       </div>
-      <div class="loading-container">
-        <loading></loading>
-      </div>
-    </scroll>
+      <!-- <div class="loading-container"> -->
+        <!-- <loading></loading> -->
+      <!-- </div> -->
+    </div>
     <router-view></router-view>
   </div>
 </template>
