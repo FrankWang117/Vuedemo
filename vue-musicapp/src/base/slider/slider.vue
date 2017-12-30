@@ -1,17 +1,20 @@
 <template>
   <div class="slider" ref="slider">
     <div class="slider-group" ref="sliderGroup">
-      <slot></slot>
+      <slot>
+      </slot>
     </div>
     <div class="dots">
-      <span class="dot" :class="{active: currentPageIndex === index}" v-for="(item,index) in dots"></span>
+      <span class="dot" :class="{active: currentPageIndex === index}" v-for="(item,index,key) in dots" :key='key' >num{{index}}</span>
     </div>
   </div>
 </template>
+
 <script>
 import BScroll from 'better-scroll'
 import {addClass} from 'common/js/dom'
 export default {
+  name: 'slider',
   data () {
     return {
       dots: [],
@@ -50,6 +53,17 @@ export default {
       this.slider.refresh()
     })
   },
+  activated() {
+    if (this.autoPlay) {
+      this._play()
+    }
+  },
+  deactivated() {
+    clearTimeout(this.timer)
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+  },
   methods: {
     _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children
@@ -75,10 +89,13 @@ export default {
         scrollX: true,
         scrollY: false,
         momentum: false,
-        snap: true,
-        snapLoop: this.loop,
-        snapThreshold: 0.3,
-        snapSpeed: 400
+        snap: {
+          loop: true, // 开启循环播放
+          // stepX: 200, // 每页宽度为 200px
+          // stepY: 100, // 每页高度为 100px
+          threshold: 0.3, // 滚动距离超过宽度/高度的 30% 时切换图片
+          speed: 400 // 切换动画时长 400ms
+        }
       })
       this.slider.on('scrollEnd', () => {
         let pageIndex = this.slider.getCurrentPage().pageX
@@ -86,9 +103,15 @@ export default {
           pageIndex -= 1
         }
         this.currentPageIndex = pageIndex
+
+        if (this.autoPlay) {
+          this._play()
+        }
+      })
+      
+      this.slider.on('beforeScrollStart', () => {
         if (this.autoPlay) {
           clearTimeout(this.timer)
-          this._play()
         }
       })
     },

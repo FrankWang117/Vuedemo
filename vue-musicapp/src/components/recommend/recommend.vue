@@ -1,12 +1,12 @@
 <template>
   <div class="recommend" ref="recommend">
-    <div class="recommend-content" ref="scroll">
+    <scroll class="recommend-content" ref="scroll" :data="disclist" >
       <div>
         <div class="slider-wrapper" ref="sliderWrapper" v-if="recommends.length">
           <slider>
             <div v-for="item in recommends">
               <a :href="item.linkUrl">
-                <img :src="item.picUrl"  class="needsclick">
+                <img :src="item.picUrl" @load="loadImage"  class="needsclick">
               </a>
             </div>
           </slider>
@@ -14,13 +14,13 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li class="item" @click="selectItem(item)" >
+            <li class="item" @click="selectItem(item)" v-for="item in disclist">
               <div class="icon">
-                <img width="60" height="60">
+                <img width="60" height="60" :src="item.imgurl">
               </div>
               <div class="text">
-                <h2 class="name"></h2>
-                <p class="desc"></p>
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
               </div>
             </li>
           </ul>
@@ -29,7 +29,7 @@
       <!-- <div class="loading-container"> -->
         <!-- <loading></loading> -->
       <!-- </div> -->
-    </div>
+    </scroll>
     <router-view></router-view>
   </div>
 </template>
@@ -37,10 +37,12 @@
   import Slider from 'base/slider/slider'
   import {getRecommend, getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
+  import Scroll from 'base/scroll/scroll'
   export default {
     data () {
       return {
-        recommends: []
+        recommends: [],
+        disclist: []
       }
     },
     created () {
@@ -58,13 +60,20 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
-            console.log(res.data.list)
+            this.disclist = res.data.list
           }
         })
+      },
+      loadImage() {
+        if (!this.checkLoaded) {
+          this.checkLoaded = true
+          this.$refs.scroll.refresh()
+        }
       }
     },
     components: {
-      Slider
+      Slider,
+      Scroll
     }
   }
 </script>
@@ -102,10 +111,10 @@
           padding-right: 20px;
         }
         .text {
-          display: flex;
-          flex-direction: columns;
-          justify-content: center;
           flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
           line-height: 20px;
           overflow: hidden;
           font-size: $font-size-medium;
