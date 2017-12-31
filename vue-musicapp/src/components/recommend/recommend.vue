@@ -16,7 +16,7 @@
           <ul>
             <li class="item" @click="selectItem(item)" v-for="item in disclist">
               <div class="icon">
-                <img width="60" height="60" :src="item.imgurl">
+                <img width="60" height="60" v-lazy="item.imgurl">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
@@ -26,9 +26,9 @@
           </ul>
         </div>
       </div>
-      <!-- <div class="loading-container"> -->
-        <!-- <loading></loading> -->
-      <!-- </div> -->
+      <div class="loading-container" v-show="!disclist.length"> 
+        <loading></loading>
+      </div>
     </scroll>
     <router-view></router-view>
   </div>
@@ -38,6 +38,7 @@
   import {getRecommend, getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   export default {
     data () {
       return {
@@ -73,7 +74,8 @@
     },
     components: {
       Slider,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
